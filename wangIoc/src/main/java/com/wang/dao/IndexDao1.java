@@ -1,6 +1,6 @@
-package com.luban.dao;
+package com.wang.dao;
 
-import com.luban.importselect.MyInvocationHandler;
+import com.wang.importselect.MyInvocationHandler;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 

@@ -1,7 +1,7 @@
-package com.luban.test;
+package com.wang.test;
 
-import com.luban.app.AppConfig;
-import com.luban.dao.dao;
+import com.wang.app.AppConfig;
+import com.wang.dao.dao;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 

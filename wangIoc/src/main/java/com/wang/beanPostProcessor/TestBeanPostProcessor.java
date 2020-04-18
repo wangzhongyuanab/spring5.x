@@ -1,4 +1,4 @@
-package com.luban.beanPostProcessor;
+package com.wang.beanPostProcessor;
 
 
 import org.springframework.beans.BeansException;

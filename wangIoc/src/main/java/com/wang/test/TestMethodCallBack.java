@@ -1,4 +1,4 @@
-package com.luban.test;
+package com.wang.test;
 
 
 

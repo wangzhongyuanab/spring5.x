@@ -1,9 +1,8 @@
-package com.luban.beanPostProcessor;
+package com.wang.beanPostProcessor;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.PriorityOrdered;
-import org.springframework.stereotype.Component;
 
 /**
  * @author 王

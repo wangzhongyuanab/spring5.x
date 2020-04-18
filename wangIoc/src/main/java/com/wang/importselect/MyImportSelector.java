@@ -1,7 +1,7 @@
-package com.luban.importselect;
+package com.wang.importselect;
 
 
-import com.luban.dao.IndexDao1;
+import com.wang.dao.IndexDao1;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 

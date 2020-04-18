@@ -1,6 +1,6 @@
-package com.luban.anno;
+package com.wang.anno;
 
-import com.luban.importselect.MyImportSelector;
+import com.wang.importselect.MyImportSelector;
 import org.springframework.context.annotation.Import;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

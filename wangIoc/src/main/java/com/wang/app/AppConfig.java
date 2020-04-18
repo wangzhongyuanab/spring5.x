@@ -1,8 +1,7 @@
-package com.luban.app;
+package com.wang.app;
 
-import com.luban.anno.EnableWang;
+import com.wang.anno.EnableWang;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 
 /**
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * @create 2020/2/20 13:34
  */
 
-@ComponentScan("com.luban")
+@ComponentScan("com.wang")
 @EnableWang
 public class AppConfig {
 }

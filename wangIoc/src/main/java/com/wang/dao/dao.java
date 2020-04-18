@@ -1,4 +1,4 @@
-package com.luban.dao;
+package com.wang.dao;
 
 /**
  * @author 王
