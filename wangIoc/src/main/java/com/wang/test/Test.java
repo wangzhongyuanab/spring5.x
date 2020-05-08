@@ -2,8 +2,9 @@ package com.wang.test;
 
 import com.wang.app.AppConfig;
 import com.wang.dao.dao;
+import com.wang.service.OrderService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
+import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 
 
 /**
@@ -27,9 +28,10 @@ public class Test {
 		//完成了扫描但是完成扫描工作的不是AnnotationConfigApplicationContext中的scanner
 		//这个才会调用scanner
 		//annotationConfigApplicationContext.scan();
-		dao indexDao = (dao) annotationConfigApplicationContext.getBean("indexDao");
-		indexDao.query();
+		//dao indexDao = (dao) annotationConfigApplicationContext.getBean("indexDao");
+		//indexDao.query();
 
+		System.out.println(annotationConfigApplicationContext.getBean(OrderService.class));
 //		Enhancer enhancer = new Enhancer();
 //		enhancer.setSuperclass(IndexDao.class);
 //		enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);

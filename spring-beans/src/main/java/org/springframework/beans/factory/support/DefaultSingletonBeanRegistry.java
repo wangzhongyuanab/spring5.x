@@ -177,10 +177,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 			synchronized (this.singletonObjects) {
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				if (singletonObject == null && allowEarlyReference) {
+					//从二级缓存中拿
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {
 						singletonObject = singletonFactory.getObject();
+						//放到三级缓存中
 						this.earlySingletonObjects.put(beanName, singletonObject);
+						//清楚二级缓存
 						this.singletonFactories.remove(beanName);
 					}
 				}

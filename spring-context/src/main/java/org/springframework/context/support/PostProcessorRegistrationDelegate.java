@@ -52,6 +52,7 @@ final class PostProcessorRegistrationDelegate {
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
+		//所有存在得BeanDefinitionRegistryPostProcessor得名字
 		Set<String> processedBeans = new HashSet<>();
 
 		if (beanFactory instanceof BeanDefinitionRegistry) {
@@ -61,11 +62,12 @@ final class PostProcessorRegistrationDelegate {
 
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
-			//自定义的BeanFactoryPostProcessor
+			//自定义的BeanFactoryPostProcessor和BeanDefinitionRegistryPostProcessor
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					BeanDefinitionRegistryPostProcessor registryProcessor =
 							(BeanDefinitionRegistryPostProcessor) postProcessor;
+					//如果是程序员指定得BeanDefinitionRegistryPostProcessor，那么这里就直接执行它得方法postProcessBeanDefinitionRegistry
 					registryProcessor.postProcessBeanDefinitionRegistry(registry);
 					registryProcessors.add(registryProcessor);
 				}
@@ -143,10 +145,10 @@ final class PostProcessorRegistrationDelegate {
 			}
 
 			// Now, invoke the postProcessBeanFactory callback of all processors handled so far.
-			//前面指向的是BeanFactoroPostProcessor的字类BeanDefinitionRegistryPostProcessor的回调方法
-			//这里执行的是BeanFactoroPostProcessor的回调方法  postProcessBeanFactory
+			//前面指向的是BeanFactoroPostProcessor的子类BeanDefinitionRegistryPostProcessor的postProcessBeanDefinitionRegistry方法
+			//这里执行的是BeanDefinitionRegistryPostProcessor得父类得方法postProcessBeanFactory
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);
-			//执行自定义的BeanFactoroPostProcessor
+			//执行程序员自定义的BeanFactoroPostProcessor的postProcessBeanFactory 即程序员通过api传的
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);
 		}
 
@@ -155,6 +157,8 @@ final class PostProcessorRegistrationDelegate {
 			invokeBeanFactoryPostProcessors(beanFactoryPostProcessors, beanFactory);
 		}
 
+		//找出程序员提供的，通过注解提供的
+		//因为上卖弄已经通过执行子类已经扫描出来了程序员提供的。。。不是通过api提供的
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let the bean factory post-processors apply to them!
 		String[] postProcessorNames =
