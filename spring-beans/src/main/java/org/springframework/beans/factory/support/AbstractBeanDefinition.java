@@ -149,13 +149,17 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	private int autowireMode = AUTOWIRE_NO;
 
+	//默认不做依赖检查
 	private int dependencyCheck = DEPENDENCY_CHECK_NONE;
 
+	//存储dependsOn 名字
 	@Nullable
 	private String[] dependsOn;
 
+	//是否作为自动装配候选-----------其实bean可以不参与自动装配得
 	private boolean autowireCandidate = true;
 
+	//是否主要候选bean
 	private boolean primary = false;
 
 	private final Map<String, AutowireCandidateQualifier> qualifiers = new LinkedHashMap<>();
@@ -163,8 +167,10 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	@Nullable
 	private Supplier<?> instanceSupplier;
 
+	//允许访问非公平方法，构造方法 ------反射
 	private boolean nonPublicAccessAllowed = true;
 
+	//调用构造方法完成宽松匹配
 	private boolean lenientConstructorResolution = true;
 
 	@Nullable

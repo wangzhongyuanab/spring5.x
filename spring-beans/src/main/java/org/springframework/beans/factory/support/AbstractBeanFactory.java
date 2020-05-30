@@ -240,7 +240,6 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException {
 
 		/**
-		 *
 		 * 通过name获取beanName，这里不使用name直接作为beanName有2个原因：
 		 *  1.name可能会以&字符开头，表明调用者想获取FactoryBean本身，而非是实现类所创建的bean
 		 *  在beanfactory中，factorybean的实现类和其他bean存储的方式是一致的，即<beanName,bean>

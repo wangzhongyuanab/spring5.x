@@ -183,7 +183,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 						singletonObject = singletonFactory.getObject();
 						//放到三级缓存中
 						this.earlySingletonObjects.put(beanName, singletonObject);
-						//清楚二级缓存
+						//清除二级缓存
 						this.singletonFactories.remove(beanName);
 					}
 				}
@@ -340,6 +340,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @see #isSingletonCurrentlyInCreation
 	 */
 	protected void beforeSingletonCreation(String beanName) {
+		//singletonsCurrentlyInCreation
 		if (!this.inCreationCheckExclusions.contains(beanName) && !this.singletonsCurrentlyInCreation.add(beanName)) {
 			throw new BeanCurrentlyInCreationException(beanName);
 		}

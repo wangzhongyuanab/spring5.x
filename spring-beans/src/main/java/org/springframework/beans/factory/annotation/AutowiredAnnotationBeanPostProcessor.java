@@ -228,6 +228,8 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		//找出所有需要注入的点，这里是找出所有加了@Autowired，@Value注解的点(方法或者属性) 但是这里找不到构造方法
+		// 因为加了@Autowired的构造方法在推断构造方法的时候已经处理过了
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
 		metadata.checkConfigMembers(beanDefinition);
 	}

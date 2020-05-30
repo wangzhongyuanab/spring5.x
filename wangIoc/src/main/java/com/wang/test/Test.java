@@ -25,6 +25,7 @@ public class Test {
 		//annotationConfigApplicationContext.addBeanFactoryPostProcessor(new MyBeanFactoryPostProcessor());
 		//初始化spring环境
 		annotationConfigApplicationContext.refresh();
+		//annotationConfigApplicationContext.scan();
 		//完成了扫描但是完成扫描工作的不是AnnotationConfigApplicationContext中的scanner
 		//这个才会调用scanner
 		//annotationConfigApplicationContext.scan();
@@ -32,6 +33,7 @@ public class Test {
 		//indexDao.query();
 
 		System.out.println(annotationConfigApplicationContext.getBean(OrderService.class));
+		annotationConfigApplicationContext.stop();
 //		Enhancer enhancer = new Enhancer();
 //		enhancer.setSuperclass(IndexDao.class);
 //		enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);

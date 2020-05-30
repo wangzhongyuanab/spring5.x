@@ -10,16 +10,10 @@ import org.springframework.stereotype.Component;
  * @create: 2020-05-08 11:30
  **/
 @Component
-public class OrderService {
-
-	@Autowired
-	UserService userService1;
+public class UserService2  implements UserService{
 
 
-	public  OrderService(String ss){
-	}
-
-	public OrderService(){
-		System.out.println("orderservice start");
+	public UserService2(){
+		System.out.println(" userservice start");
 	}
 }

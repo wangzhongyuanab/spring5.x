@@ -294,8 +294,11 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 	@Override
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+		//调用父类的方法，找出所有的生命周期回调方法---初始化和销毁
 		super.postProcessMergedBeanDefinition(beanDefinition, beanType, beanName);
+		//找出所有需要注入的点，这里是找出所有加了@Resource注解的点
 		InjectionMetadata metadata = findResourceMetadata(beanName, beanType, null);
+		//这里没看懂，主要是把找出来需要注入的点加到一个list中，即是对injectElements做了一个复制，因为后面注入属性的时候是通过这个list进行查找的
 		metadata.checkConfigMembers(beanDefinition);
 	}
 

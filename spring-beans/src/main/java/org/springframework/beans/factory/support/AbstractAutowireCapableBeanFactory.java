@@ -573,7 +573,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					/**
 					 * 第三次执行后置处理器
 					 * MergedBeanDefinitionPostProcessor.postProcessMergedBeanDefinition
-					 * 缓存bean当中需要注入的信息到bd里，仅仅是缓存并没有处理
+					 * 通过后置处理器来应用合并之后的bd
+					 * 应用bd？----把bd的里面的信息拿出来--需要属性 即这里是将bean中需要注入依赖的属性缓存起来
 					 */
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
@@ -591,6 +592,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		 */
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
+		//这个boolean是判断支持循环依赖的重要变量 而spring把allowCircularReferences这个值默认设置成为了true
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
@@ -1206,10 +1208,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		 */
 		// Candidate constructors for autowiring?
 		// 查找是否存在候选的自动注入构造器, 由后置处理器决定返回哪些构造方法
+		//如果提供了2个合格的构造方法，那么会报异常
+		//如果只提供了默认的构造方法，那么这里会返回null，这里返回null下面还是直接调用默认的构造方法去实例化对象
+		//如果提供了多个模糊的构造方法，那么这里还是会返回null
+		//提供了一个合格的构造方法并且不是默认的，那么这里就会返回这个合格的构造方法
+		//其实这里要么返回一个要么返回null，不可能返回多个 因为在这个方法的返回语句的判断里，只有第一个判断有可能为true
+		//因为在java中primaryConstructor这个必定是返回null的
+		//但如果在多个构造方法上都加了@Autowired(required=false)这个注解的话,就会返回多个
+		//如果提供多个构造方法，但是只加了一个@Autowired(required=true)则会返回这个构造方法
+		//这里的推断和装配模型是没有区别的(不管是自动装配还是手动装配这里都会返回的情况都是一样的)
 		Constructor<?>[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);
 		if (ctors != null || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||
 				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) {
-			// 通过构造方法自动装配的方式(注入的方式)调用构造器实例化bean对象
+			// 通过构造方法自动装配的方式(注入的方式)调用构造器实例化bean对象 确定最终使用哪个构造方法
+			//但是下面的这个确定构造方法与装配模型是有关系的，与mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR判断有关系
 			return autowireConstructor(beanName, mbd, ctors, args);
 		}
 
@@ -1392,6 +1404,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 		}
 
+		//这里是看程序员有没有提供值
 		PropertyValues pvs = (mbd.hasPropertyValues() ? mbd.getPropertyValues() : null);
 
 		int resolvedAutowireMode = mbd.getResolvedAutowireMode();
@@ -1403,6 +1416,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 			// Add property values based on autowire by type if applicable.
 			if (resolvedAutowireMode == AUTOWIRE_BY_TYPE) {
+				//找出bw这个类中需要注入的方法
+				//找到这个方法的参数，这里只是在map中找出这个参数，还没有设置值
 				autowireByType(beanName, mbd, bw, newPvs);
 			}
 			pvs = newPvs;
@@ -1417,6 +1432,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 			PropertyDescriptor[] filteredPds = filterPropertyDescriptorsForDependencyCheck(bw, mbd.allowCaching);
 			if (hasInstAwareBpps) {
+				//调用后置处理器完成注解的属性填充
 				for (BeanPostProcessor bp : getBeanPostProcessors()) {
 					if (bp instanceof InstantiationAwareBeanPostProcessor) {
 						InstantiationAwareBeanPostProcessor ibp = (InstantiationAwareBeanPostProcessor) bp;
@@ -1434,6 +1450,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		if (pvs != null) {
+			//属性值应用上----程序员手动提供的/spring自己找出来的
 			applyPropertyValues(beanName, mbd, bw, pvs);
 		}
 	}
@@ -1490,6 +1507,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		Set<String> autowiredBeanNames = new LinkedHashSet<>(4);
+		//这里就是找到以set开头的方法的后面几个字母，首字母小写
 		String[] propertyNames = unsatisfiedNonSimpleProperties(mbd, bw);
 		for (String propertyName : propertyNames) {
 			try {
